@@ -4,9 +4,11 @@ import backend.academy.fractal.domain.FractalImage;
 import backend.academy.fractal.domain.Rect;
 import backend.academy.fractal.renderer.FractalRenderer;
 import backend.academy.fractal.renderer.RendererConfig;
+import backend.academy.fractal.transformations.Bubble;
 import backend.academy.fractal.transformations.Linear;
 import backend.academy.fractal.transformations.Sinusoidal;
 import backend.academy.fractal.transformations.Spherical;
+import backend.academy.fractal.transformations.Swirl;
 import backend.academy.fractal.utils.ConfigLoader;
 import backend.academy.fractal.utils.ImageUtils;
 import java.util.List;
@@ -25,7 +27,9 @@ public class Main {
             List.of(
                 new Linear(),
                 new Sinusoidal(),
-                new Spherical()
+                new Spherical(),
+                new Swirl(),
+                new Bubble()
             )
         );
         FractalImage canvas = FractalImage.create(config.width(), config.height());
