@@ -8,63 +8,72 @@ import static org.junit.jupiter.api.Assertions.*;
 class SinusoidalTest {
 
     @Test
-    void testTransformationNonZeroPoint() {
+    void testSinusoidalAtOrigin() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(2, 3);
-
-        // Act
-        Point result = spherical.apply(original);
-
-        // Assert
-        assertEquals(2.0 / 13, result.x());
-        assertEquals(3.0 / 13, result.y());
-    }
-
-    @Test
-    void testTransformationOrigin() {
-        // Arrange
-        Transformation spherical = new Spherical();
+        Transformation sinusoidal = new Sinusoidal();
         Point original = new Point(0, 0);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = sinusoidal.apply(original);
 
         // Assert
-        assertEquals(0, result.x());
-        assertEquals(0, result.y());
+        assertEquals(0, result.x(), 0.0001);
+        assertEquals(0, result.y(), 0.0001);
     }
 
     @Test
-    void testTransformationNegativeCoordinates() {
+    void testSinusoidalWithPositiveCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(-2, -3);
+        Transformation sinusoidal = new Sinusoidal();
+        Point original = new Point(Math.PI / 2, Math.PI / 2);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = sinusoidal.apply(original);
 
         // Assert
-        assertEquals(-2.0 / 13, result.x());
-        assertEquals(-3.0 / 13, result.y());
+        assertEquals(1, result.x(), 0.0001);
+        assertEquals(1, result.y(), 0.0001);
     }
 
     @Test
-    void testTransformationPointOnAxis() {
+    void testSinusoidalWithNegativeCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point originalX = new Point(5, 0);
-        Point originalY = new Point(0, 4);
+        Transformation sinusoidal = new Sinusoidal();
+        Point original = new Point(-Math.PI / 2, -Math.PI / 2);
 
         // Act
-        Point resultX = spherical.apply(originalX);
-        Point resultY = spherical.apply(originalY);
+        Point result = sinusoidal.apply(original);
 
         // Assert
-        assertEquals(1.0 / 5, resultX.x());
-        assertEquals(0, resultX.y());
+        assertEquals(-1, result.x(), 0.0001);
+        assertEquals(-1, result.y(), 0.0001);
+    }
 
-        assertEquals(0, resultY.x());
-        assertEquals(1.0 / 4, resultY.y());
+    @Test
+    void testSinusoidalWithZero() {
+        // Arrange
+        Transformation sinusoidal = new Sinusoidal();
+        Point original = new Point(0, Math.PI);
+
+        // Act
+        Point result = sinusoidal.apply(original);
+
+        // Assert
+        assertEquals(0, result.x(), 0.0001);
+        assertEquals(0, result.y(), 0.0001);
+    }
+
+    @Test
+    void testSinusoidalWithLargeCoordinates() {
+        // Arrange
+        Transformation sinusoidal = new Sinusoidal();
+        Point original = new Point(10, 15);
+
+        // Act
+        Point result = sinusoidal.apply(original);
+
+        // Assert
+        assertNotEquals(original.x(), result.x());
+        assertNotEquals(original.y(), result.y());
     }
 }

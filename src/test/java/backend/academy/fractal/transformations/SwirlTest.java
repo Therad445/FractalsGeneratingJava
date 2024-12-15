@@ -6,63 +6,72 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SwirlTest {
     @Test
-    void testTransformationNonZeroPoint() {
+    void testSwirlAtOrigin() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(2, 3);
-
-        // Act
-        Point result = spherical.apply(original);
-
-        // Assert
-        assertEquals(2.0 / 13, result.x());
-        assertEquals(3.0 / 13, result.y());
-    }
-
-    @Test
-    void testTransformationOrigin() {
-        // Arrange
-        Transformation spherical = new Spherical();
+        Transformation swirl = new Swirl();
         Point original = new Point(0, 0);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = swirl.apply(original);
 
         // Assert
-        assertEquals(0, result.x());
-        assertEquals(0, result.y());
+        assertEquals(0, result.x(), 0.0001);  // Ожидаем (0, 0) для центра
+        assertEquals(0, result.y(), 0.0001);  // Ожидаем (0, 0) для центра
     }
 
     @Test
-    void testTransformationNegativeCoordinates() {
+    void testSwirlPositiveCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(-2, -3);
+        Transformation swirl = new Swirl();
+        Point original = new Point(1, 1);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = swirl.apply(original);
 
         // Assert
-        assertEquals(-2.0 / 13, result.x());
-        assertEquals(-3.0 / 13, result.y());
+        assertNotEquals(original.x(), result.x());
+        assertNotEquals(original.y(), result.y());
     }
 
     @Test
-    void testTransformationPointOnAxis() {
+    void testSwirlNegativeCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point originalX = new Point(5, 0);
-        Point originalY = new Point(0, 4);
+        Transformation swirl = new Swirl();
+        Point original = new Point(-1, -1);
 
         // Act
-        Point resultX = spherical.apply(originalX);
-        Point resultY = spherical.apply(originalY);
+        Point result = swirl.apply(original);
 
         // Assert
-        assertEquals(1.0 / 5, resultX.x());
-        assertEquals(0, resultX.y());
+        assertNotEquals(original.x(), result.x());
+        assertNotEquals(original.y(), result.y());
+    }
 
-        assertEquals(0, resultY.x());
-        assertEquals(1.0 / 4, resultY.y());
+    @Test
+    void testSwirlAtUnitCircle() {
+        // Arrange
+        Transformation swirl = new Swirl();
+        Point original = new Point(Math.cos(Math.PI / 4), Math.sin(Math.PI / 4));
+
+        // Act
+        Point result = swirl.apply(original);
+
+        // Assert
+        assertNotEquals(original.x(), result.x());
+        assertNotEquals(original.y(), result.y());
+    }
+
+    @Test
+    void testSwirlWithZeroCoordinates() {
+        // Arrange
+        Transformation swirl = new Swirl();
+        Point original = new Point(0, 5); // На оси Y
+
+        // Act
+        Point result = swirl.apply(original);
+
+        // Assert
+        assertNotEquals(original.x(), result.x());
+        assertNotEquals(original.y(), result.y());
     }
 }

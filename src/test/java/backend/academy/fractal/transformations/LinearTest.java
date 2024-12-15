@@ -6,65 +6,73 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinearTest {
-
     @Test
-    void testTransformationNonZeroPoint() {
+    void testLinearAtOrigin() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(2, 3);
-
-        // Act
-        Point result = spherical.apply(original);
-
-        // Assert
-        assertEquals(2.0 / 13, result.x());
-        assertEquals(3.0 / 13, result.y());
-    }
-
-    @Test
-    void testTransformationOrigin() {
-        // Arrange
-        Transformation spherical = new Spherical();
+        Transformation linear = new Linear();
         Point original = new Point(0, 0);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = linear.apply(original);
 
         // Assert
-        assertEquals(0, result.x());
-        assertEquals(0, result.y());
+        assertEquals(0, result.x(), 0.0001);
+        assertEquals(0, result.y(), 0.0001);
     }
 
     @Test
-    void testTransformationNegativeCoordinates() {
+    void testLinearWithPositiveCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point original = new Point(-2, -3);
+        Transformation linear = new Linear();
+        Point original = new Point(2, 3);
 
         // Act
-        Point result = spherical.apply(original);
+        Point result = linear.apply(original);
 
         // Assert
-        assertEquals(-2.0 / 13, result.x());
-        assertEquals(-3.0 / 13, result.y());
+        assertEquals(2, result.x(), 0.0001);
+        assertEquals(3, result.y(), 0.0001);
     }
 
     @Test
-    void testTransformationPointOnAxis() {
+    void testLinearWithNegativeCoordinates() {
         // Arrange
-        Transformation spherical = new Spherical();
-        Point originalX = new Point(5, 0);
-        Point originalY = new Point(0, 4);
+        Transformation linear = new Linear();
+        Point original = new Point(-5, -7);
 
         // Act
-        Point resultX = spherical.apply(originalX);
-        Point resultY = spherical.apply(originalY);
+        Point result = linear.apply(original);
 
         // Assert
-        assertEquals(1.0 / 5, resultX.x());
-        assertEquals(0, resultX.y());
+        assertEquals(-5, result.x(), 0.0001);
+        assertEquals(-7, result.y(), 0.0001);
+    }
 
-        assertEquals(0, resultY.x());
-        assertEquals(1.0 / 4, resultY.y());
+    @Test
+    void testLinearWithMixedCoordinates() {
+        // Arrange
+        Transformation linear = new Linear();
+        Point original = new Point(-3, 6);
+
+        // Act
+        Point result = linear.apply(original);
+
+        // Assert
+        assertEquals(-3, result.x(), 0.0001);
+        assertEquals(6, result.y(), 0.0001);
+    }
+
+    @Test
+    void testLinearWithLargeCoordinates() {
+        // Arrange
+        Transformation linear = new Linear();
+        Point original = new Point(1000, 2000);
+
+        // Act
+        Point result = linear.apply(original);
+
+        // Assert
+        assertEquals(1000, result.x(), 0.0001);
+        assertEquals(2000, result.y(), 0.0001);
     }
 }
