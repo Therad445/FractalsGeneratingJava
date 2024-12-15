@@ -1,7 +1,7 @@
 package backend.academy.fractal.domain;
 
 public record Pixel(int r, int g, int b, int hitCount) {
-    private static final int RGB_INT = 255;
+    public static final int RGB_INT = 255;
 
     public Pixel add(Pixel other) {
         return new Pixel(

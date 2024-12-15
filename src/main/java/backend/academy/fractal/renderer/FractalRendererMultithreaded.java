@@ -6,11 +6,12 @@ import backend.academy.fractal.domain.Point;
 import backend.academy.fractal.domain.Rect;
 import backend.academy.fractal.transformations.Transformation;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 import java.util.concurrent.ThreadLocalRandom;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class FractalRendererMultithreaded {
 
     private static final ForkJoinPool POOL = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
@@ -35,7 +36,15 @@ public class FractalRendererMultithreaded {
         private final int start;
         private final int end;
 
-        RenderTask(FractalImage canvas, Rect world, List<Transformation> transformations, int samples, int iterPerSample, int start, int end) {
+        RenderTask(
+            FractalImage canvas,
+            Rect world,
+            List<Transformation> transformations,
+            int samples,
+            int iterPerSample,
+            int start,
+            int end
+        ) {
             this.canvas = canvas;
             this.world = world;
             this.transformations = transformations;
@@ -87,8 +96,13 @@ public class FractalRendererMultithreaded {
             for (int x = 0; x < canvas.width(); x++) {
                 for (int y = 0; y < canvas.height(); y++) {
                     if (pixelBuffer[x][y] > 0) {
-                        canvas.updatePixel(x, y, new Pixel(RendererConfig.DEFAULT_COLOR.getRed(),
-                            RendererConfig.DEFAULT_COLOR.getGreen(), RendererConfig.DEFAULT_COLOR.getBlue(), 255));
+                        canvas.updatePixel(
+                            x,
+                            y,
+                            new Pixel(RendererConfig.DEFAULT_COLOR.getRed(),
+                            RendererConfig.DEFAULT_COLOR.getGreen(), RendererConfig.DEFAULT_COLOR.getBlue(),
+                                Pixel.RGB_INT)
+                        );
                     }
                 }
             }

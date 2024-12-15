@@ -34,7 +34,7 @@ public class Main {
             )
         );
 
-        long SingleThreadingStartTime = System.currentTimeMillis();
+        long singleThreadingStartTime = System.currentTimeMillis();
         FractalImage canvasSingle = FractalImage.create(config.width(), config.height());
         log.info("Генерация фрактального пламени...");
         FractalRenderer.render(
@@ -44,15 +44,15 @@ public class Main {
             config.samples(),
             config.iterationsPerSample()
         );
-        long SingleThreadingEndTime = System.currentTimeMillis();
+        long singleThreadingEndTime = System.currentTimeMillis();
 
         saveImage(canvasSingle, "fractalSingle.png");
-        log.info("Рендеринг завершён за {} мс", SingleThreadingEndTime - SingleThreadingStartTime);
+        renderTime(singleThreadingEndTime, singleThreadingStartTime);
 
         FractalImage canvasMulti = FractalImage.create(config.width(), config.height());
 
 
-        long MultiThreadingStartTime = System.currentTimeMillis();
+        long multiThreadingStartTime = System.currentTimeMillis();
         FractalRendererMultithreaded.render(
             canvasMulti,
             config.worldBounds(),
@@ -60,11 +60,15 @@ public class Main {
             config.samples(),
             config.iterationsPerSample()
         );
-        long MultiThreadingEndTime = System.currentTimeMillis();
+        long multiThreadingEndTime = System.currentTimeMillis();
 
         saveImage(canvasMulti, "fractalMulti.png");
-        log.info("Рендеринг завершён за {} мс", MultiThreadingEndTime - MultiThreadingStartTime);
+        renderTime(multiThreadingEndTime, multiThreadingStartTime);
 
+    }
+
+    private static void renderTime(long multiThreadingEndTime, long multiThreadingStartTime) {
+        log.info("Рендеринг завершён за {} мс", multiThreadingEndTime - multiThreadingStartTime);
     }
 
     private static void saveImage(FractalImage canvasSingle, String image) {
