@@ -3,6 +3,7 @@ package backend.academy;
 import backend.academy.fractal.domain.FractalImage;
 import backend.academy.fractal.domain.Rect;
 import backend.academy.fractal.renderer.FractalRenderer;
+import backend.academy.fractal.renderer.FractalRendererMultithreaded;
 import backend.academy.fractal.renderer.RendererConfig;
 import backend.academy.fractal.transformations.Bubble;
 import backend.academy.fractal.transformations.Linear;
@@ -32,20 +33,44 @@ public class Main {
                 new Bubble()
             )
         );
-        FractalImage canvas = FractalImage.create(config.width(), config.height());
 
+        long SingleThreadingStartTime = System.currentTimeMillis();
+        FractalImage canvasSingle = FractalImage.create(config.width(), config.height());
         log.info("Генерация фрактального пламени...");
         FractalRenderer.render(
-            canvas,
+            canvasSingle,
             config.worldBounds(),
             config.transformations(),
             config.samples(),
             config.iterationsPerSample()
         );
+        long SingleThreadingEndTime = System.currentTimeMillis();
 
+        saveImage(canvasSingle, "fractalSingle.png");
+        log.info("Рендеринг завершён за {} мс", SingleThreadingEndTime - SingleThreadingStartTime);
+
+        FractalImage canvasMulti = FractalImage.create(config.width(), config.height());
+
+
+        long MultiThreadingStartTime = System.currentTimeMillis();
+        FractalRendererMultithreaded.render(
+            canvasMulti,
+            config.worldBounds(),
+            config.transformations(),
+            config.samples(),
+            config.iterationsPerSample()
+        );
+        long MultiThreadingEndTime = System.currentTimeMillis();
+
+        saveImage(canvasMulti, "fractalMulti.png");
+        log.info("Рендеринг завершён за {} мс", MultiThreadingEndTime - MultiThreadingStartTime);
+
+    }
+
+    private static void saveImage(FractalImage canvasSingle, String image) {
         try {
-            ImageUtils.save(canvas, "fractal.png");
-            log.info("Фрактал сохранен как fractal.png");
+            ImageUtils.save(canvasSingle, image);
+            log.info("Фрактал сохранен как {}", image);
         } catch (Exception e) {
             log.error("Ошибка сохранения: {}", e.getMessage());
         }
